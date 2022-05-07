@@ -1,6 +1,6 @@
 import pandas as pd
 
 
-data = pd.read.py('.../data/crawler.py')
+data = pd.read_py('.../data/crawler.py')
 
 print('')

@@ -5,3 +5,8 @@ print(data)
 
 titles = data['title'].values
 print(titles)
+
+
+
+
+

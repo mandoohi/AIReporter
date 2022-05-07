@@ -6,7 +6,8 @@ titles = data['title'].values
 
 tokenizer = tf.keras.preprocessing.text.Tokenizer()
 tokenizer.fit_on_texts(titles)
-word_count = len(tokenizer.word_index)+1
-
 print(tokenizer.word_index)
-print(word_count)
+
+sequence = tokenizer.texts_to_sequences([titles[0]])[0]
+print([titles[0]])
+print(sequence)

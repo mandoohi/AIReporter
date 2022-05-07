@@ -8,7 +8,8 @@ for title in titles:
     words = title.split()
     for word in words:
         if word not in word_index:
-            word_index[word] = len(word_index)
+            word_index[word] = len(word_index)+1
+
 
 
 print(word_index)
