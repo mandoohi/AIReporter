@@ -9,7 +9,7 @@ import numpy as np
 context = ssl._create_unverified_context()
 headers = {'User-Agent': 'Mozilla/5.0'}
 
-url = 'https://news.naver.com/main/clusterArticles.naver?id=c_202205041100_00001039&mode=LSD&mid=shm&sid1=100&oid=003&aid=0011167097'
+url = 'https://news.naver.com/main/clusterArticles.naver?id=c_202205141240_00000006&mode=LSD&mid=shm&sid1=100&oid=001&aid=0013178345'
 request = Request(url, headers=headers)
 response = urlopen(request, context=context)
 html = response.read()
@@ -22,8 +22,6 @@ for r in result:
     if r.text != '\n\n' and  r.text != '\n\n동영상기사\n':
         titles.append(r.text)
 
-print(titles)
-
 if not os.path.exists('../data'):
     os.mkdir('../data')
 
@@ -35,14 +33,23 @@ tokenizer = tf.keras.preprocessing.text.Tokenizer()
 tokenizer.fit_on_texts(titles)
 print(tokenizer.word_index)
 sequence = tokenizer.texts_to_sequences([titles[0]])[0]
-x = np.array([[]])
+x = []
 y = []
-for a in range(1,len(sequence)+1):
-    x[a:, 0] = sequence[:a]
-    y[a] = sequence[a:a+1]
-print(x)
-print(y)
-
-
-
+print(sequence)
+for a in range(1, len(sequence)):
+    x.append(sequence[:a])
+    y.append(sequence[a])
+print('x = ', x)
+print('y= ', y)
+word_count = len(tokenizer.word_index)+1
+max_len_y = 0
+max_len = 0
+for i in range(len(x)):
+    max_len = max(max_len, len(x[i]))
+for i in range(len(y)):
+    max_len_y = max(max_len_y, int(y[i]))
+pad_sequences = tf.keras.preprocessing.sequence.pad_sequences(x, maxlen=max_len)
+print(pad_sequences)
+categorical_data = tf.keras.utils.to_categorical(y, num_classes = max_len_y+1)
+print(categorical_data)
 
