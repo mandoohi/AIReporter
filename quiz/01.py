@@ -9,7 +9,7 @@ import numpy as np
 context = ssl._create_unverified_context()
 headers = {'User-Agent': 'Mozilla/5.0'}
 
-url = 'https://news.naver.com/main/clusterArticles.naver?id=c_202205141240_00000006&mode=LSD&mid=shm&sid1=100&oid=001&aid=0013178345'
+url = 'https://news.naver.com/main/clusterArticles.naver?id=c_202205271700_00000001&mode=LSD&mid=shm&sid1=100&oid=277&aid=0005095529'
 request = Request(url, headers=headers)
 response = urlopen(request, context=context)
 html = response.read()
@@ -35,6 +35,7 @@ print(tokenizer.word_index)
 sequence = tokenizer.texts_to_sequences([titles[0]])[0]
 x = []
 y = []
+print(titles[0])
 print(sequence)
 for a in range(1, len(sequence)):
     x.append(sequence[:a])
@@ -52,4 +53,16 @@ pad_sequences = tf.keras.preprocessing.sequence.pad_sequences(x, maxlen=max_len)
 print(pad_sequences)
 categorical_data = tf.keras.utils.to_categorical(y, num_classes = max_len_y+1)
 print(categorical_data)
+
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Embedding(max(sequence)+1,5),
+    tf.keras.layers.SimpleRNN(3),
+    tf.keras.layers.Dense(max(sequence)+1),
+    tf.keras.layers.Softmax()
+])
+
+predict = model.predict([sequence])
+
+argmax = np.argmax(predict[0])
+print(predict)
 
